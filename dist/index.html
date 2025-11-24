@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Transpilador De Codigo</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-dark header-gradient shadow-sm mb-4">
+        <div class="container-fluid">
+            <span class="navbar-brand fw-bold">Transpilador de Código</span>
+        </div>
+    </nav>
+
+    <div class="container mb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card shadow border-0 rounded-4">
+                    <div class="card-header bg-white p-4 rounded-top-4">
+                        <h5 class="text-primary fw-bold mb-3">
+                            Características Soportadas
+                        </h5>
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge bg-info text-dark">Variables</span>
+                            <span class="badge bg-info text-dark">Objetos</span>
+                            <span class="badge bg-info text-dark">Arreglos</span>
+                            <span class="badge bg-info text-dark">Funciones</span>
+                            <span class="badge bg-warning text-dark">Estructuras de Control</span>
+                            <span class="badge bg-warning text-dark">Ciclos de Repetición</span>
+                            <span class="badge bg-secondary text-light">Impresiones</span>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-4">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label for="inputCode" class="form-label fw-bold text-warning">Código De JavaScript</label>
+                                <textarea id="inputCode" class="form-control bg-light code-area font-monospace"
+                                    rows="13" placeholder="// Escribe tu código aquí..."></textarea>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="outputCode" class="form-label fw-bold text-success">Código De Python</label>
+                                <textarea id="outputCode" class="form-control border-success code-area font-monospace"
+                                    rows="13" readonly placeholder="// El resultado aparecerá aquí..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="card-footer bg-white p-3 d-flex justify-content-between align-items-center rounded-bottom-4">
+                        <div>
+                            <button id="btnClear" class="btn btn-outline-secondary me-2">
+                                Limpiar
+                            </button>
+                            <button id="btnTranspile" class="btn btn-primary fw-bold">
+                                Transpilar Código →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./bundle.js"></script>
+</body>
+</html>

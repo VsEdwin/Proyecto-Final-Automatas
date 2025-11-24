@@ -1,0 +1,13 @@
+body {
+background: #f5f7fa;
+}
+.code-area {
+resize: none;
+border-radius: 0.75rem;
+}
+.header-gradient {
+background: linear-gradient(90deg, #0d6efd, #6610f2);
+}
+.badge {
+font-size: 0.75rem;
+}
