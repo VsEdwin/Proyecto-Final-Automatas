@@ -1,4 +1,4 @@
-body {
+/* body {
     background: #f5f7fa;
     background: url('../img/js.jpg') fixed no-repeat center center;
     background-size: cover;
@@ -12,4 +12,70 @@ body {
 }
 .badge {
     font-size: 0.75rem;
+}
+
+.card {
+    background-color: #1b1b1b;
+    color: #eaeaea;
+}
+
+.card-header,
+.card-footer {
+    background-color: #242424 !important;
+} */
+
+body {
+    font-family: 'Share Tech Mono', monospace;
+    background: url('../img/js.jpg'); /* Fondo estilo hacker */
+    background-size: cover;
+    background-attachment: fixed;
+    color: #00ff9f;
+}
+
+.header-gradient {
+    background: linear-gradient(90deg, #001a12, #003322);
+    border-bottom: 1px solid #00ff88;
+}
+
+.card {
+    background-color: rgba(0, 15, 10, 0.85);
+    border: 1px solid #00ff88;
+    box-shadow: 0 0 15px #00ff88;
+    color: #00ff9f;
+}
+
+.card-header,
+.card-footer {
+    background-color: rgba(0, 22, 15, 0.8) !important;
+    border-bottom: 1px solid #00ff88 !important;
+}
+
+textarea {
+    background-color: #001a12 !important;
+    color: #ff2323 !important;
+    border: 1px solid #00ff88 !important;
+    box-shadow: inset 0 0 10px #00ff55;
+}
+
+.btn-primary {
+    background-color: #003322;
+    border: 1px solid #00ff88;
+    color: #00ff9f;
+    box-shadow: 0 0 10px #00ff88;
+}
+
+.btn-primary:hover {
+    background-color: #005533;
+    color: #ffffff;
+    box-shadow: 0 0 15px #00ffaa;
+}
+
+.btn-outline-secondary {
+    border: 1px solid #00ff88;
+    color: #00ff9f;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #004422;
+    color: white;
 }
