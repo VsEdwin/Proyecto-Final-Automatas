@@ -9,7 +9,7 @@ module.exports = {
   },
   devServer: {
     static: './dist', // Carpeta donde lanzara los archivos
-    port: 3001, // Puerto del servidor de desarrollo
+    port: 3002, // Puerto del servidor de desarrollo
     open: true, // Abre el navegador automáticamente
     hot: true, // Habilita recarga en vivo
   },

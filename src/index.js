@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 
 //Importacion de los modulos
 import { transpilarVariables } from "./transpilar/variables.js";
+import { transpilarImpresiones } from "./transpilar/impresiones.js";
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -16,20 +17,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
     btntranspilar.addEventListener("click", () => {
 
-        //obtiene el codigo que se ingreso 
-        const codigo = entrada.value;
+        // Obtiene el código ingresado
+        let codigo = entrada.value;
 
-        //Valida si se encuentra vacia y manda la alerta
+        // Valida si está vacío y manda alerta
         if (codigo.trim() === "") {
             Swal.fire("Atención", "El área de entrada está vacía.", "warning");
             return;
         }
 
-        //llama a la funcion para hacer la traduccion
-        const resultado = transpilarVariables(codigo);
+        // Ejecuta el transpilador de variables
+        codigo = transpilarVariables(codigo);
 
-        //Muestra el resultado
-        salida.value = resultado;
+        //Ejecuta el transpilador de impresiones
+        codigo = transpilarImpresiones(codigo);
+
+        // Muestra el resultado final
+        salida.value = codigo;
     });
 
     btnlimpiar.addEventListener("click", () => {
