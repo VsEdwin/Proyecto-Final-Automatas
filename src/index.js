@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 //Importacion de los modulos
 import { transpilarVariables } from "./transpilar/variables.js";
 import { transpilarImpresiones } from "./transpilar/impresiones.js";
+import { transpilarObjetos } from "./transpilar/objetos.js"
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -31,6 +32,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         //Ejecuta el transpilador de impresiones
         codigo = transpilarImpresiones(codigo);
+
+        //Ejecuta el transpilador de objetos
+        codigo = transpilarObjetos(codigo);
 
         // Muestra el resultado final
         salida.value = codigo;
