@@ -51,3 +51,14 @@ Objetos
         },
         rol: null
     };
+
+Arreglos
+    const nums = [1, 2, 3];
+
+    let datos = ["Ana", 24, true, null];
+    
+    const users = [
+        { nombre: "Luis", edad: 20 },
+        { nombre: "Ana", edad: 30 }
+    ];
+
