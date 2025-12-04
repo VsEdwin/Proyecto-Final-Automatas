@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import { transpilarVariables } from "./transpilar/variables.js";
 import { transpilarImpresiones } from "./transpilar/impresiones.js";
 import { transpilarObjetos } from "./transpilar/objetos.js"
+import { transpilarArreglos } from "./transpilar/arreglos.js";
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -35,6 +36,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         //Ejecuta el transpilador de objetos
         codigo = transpilarObjetos(codigo);
+
+        //Ejecuta el transpilador de arreglos
+        codigo = transpilarArreglos(codigo);
 
         // Muestra el resultado final
         salida.value = codigo;
