@@ -9,6 +9,7 @@ import { transpilarImpresiones } from "./transpilar/impresiones.js";
 import { transpilarObjetos } from "./transpilar/objetos.js"
 import { transpilarArreglos } from "./transpilar/arreglos.js";
 import { transpilarFunciones } from "./transpilar/funciones.js";
+import {transpilarCiclos} from "./transpilar/ciclos.js";
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -29,20 +30,25 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Ejecuta el transpilador de variables
-        codigo = transpilarVariables(codigo);
 
         //Ejecuta el transpilador de impresiones
         codigo = transpilarImpresiones(codigo);
+        
+        // Ejecuta el transpilador de variables
+        codigo = transpilarVariables(codigo);
 
+        //Ejecuta el trnaspilador de funciones
+        codigo = transpilarFunciones(codigo);
+
+        //Eejecuta el transpioldaro de ciclos
+        codigo = transpilarCiclos(codigo);
+        
         //Ejecuta el transpilador de objetos
         codigo = transpilarObjetos(codigo);
 
         //Ejecuta el transpilador de arreglos
         codigo = transpilarArreglos(codigo);
 
-        //Ejecuta el trnaspilador de funciones
-        codigo = transpilarFunciones(codigo);
 
         // Muestra el resultado final
         salida.value = codigo;
