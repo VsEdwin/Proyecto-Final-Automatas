@@ -4,62 +4,79 @@ export function transpilarCiclos(code) {
     const salida = [];
     let indent = 0;
 
-    const forClasico = /^for\s*\(\s*let\s+(\w+)\s*=\s*(.*?)\s*;\s*\1\s*([<>]=?|===|!==)\s*(.*?)\s*;\s*\1(\+\+|--)\s*\)\s*\{$/;
-    const forOf = /^for\s*\(\s*let\s+(\w+)\s+of\s+(.*?)\s*\)\s*\{$/;
-    const forIn = /^for\s*\(\s*let\s+(\w+)\s+in\s+(.*?)\s*\)\s*\{$/;
+    const forClasico = /^for\s*\(\s*(?:let|var|const)\s+(\w+)\s*=\s*(.*?)\s*;\s*\1\s*([<>]=?|===|!==)\s*(.*?)\s*;\s*\1(\+\+|--)\s*\)\s*\{$/;
+    const forOf = /^for\s*\(\s*(?:let|var|const)\s+(\w+)\s+of\s+(.*?)\s*\)\s*\{$/;
+    const forIn = /^for\s*\(\s*(?:let|var|const)\s+(\w+)\s+in\s+(.*?)\s*\)\s*\{$/;
     const whileExp = /^while\s*\((.*?)\)\s*\{$/;
 
     for (let line of lineas) {
 
         let trim = line.trim();
 
-        // ===== CICLOS =====
+        //      CICLO FOR CLÁSICO
         if (forClasico.test(trim)) {
+
             const m = trim.match(forClasico);
-            const start = m[2], op = m[3], end = m[4];
+            const variable = m[1];
+            let inicio = m[2];
+            let operador = m[3];
+            let fin = m[4];
+            let incremento = m[5];
+
+            // Convertir true/false/null
+            inicio = fixBooleanNull(inicio);
+            fin = fixBooleanNull(fin);
 
             let rangeCode = "";
-            if (op === "<") rangeCode = `range(${start}, ${end})`;
-            else if (op === "<=") rangeCode = `range(${start}, ${end}+1)`;
-            else if (op === ">") rangeCode = `range(${start}, ${end}, -1)`;
-            else if (op === ">=") rangeCode = `range(${start}, ${end}-1, -1)`;
 
-            salida.push(`${"    ".repeat(indent)}for ${m[1]} in ${rangeCode}:`);
+            if (incremento === "++") {
+                if (operador === "<=") rangeCode = `range(${inicio}, ${fin} + 1)`;
+                else rangeCode = `range(${inicio}, ${fin})`;
+            }
+
+            if (incremento === "--") {
+                if (operador === ">=") rangeCode = `range(${inicio}, ${fin} - 1, -1)`;
+                else rangeCode = `range(${inicio}, ${fin}, -1)`;
+            }
+
+            salida.push(`${"    ".repeat(indent)}for ${variable} in ${rangeCode}:`);
             indent++;
             continue;
         }
 
+        //          FOR OF
         if (forOf.test(trim)) {
             const m = trim.match(forOf);
-            salida.push(`${"    ".repeat(indent)}for ${m[1]} in ${m[2]}:`);
+            salida.push(`${"    ".repeat(indent)}for ${m[1]} in ${fixBooleanNull(m[2])}:`);
             indent++;
             continue;
         }
 
+        //           FOR IN
         if (forIn.test(trim)) {
             const m = trim.match(forIn);
-            salida.push(`${"    ".repeat(indent)}for ${m[1]} in ${m[2]}.keys():`);
+            salida.push(`${"    ".repeat(indent)}for ${m[1]} in ${fixBooleanNull(m[2])}.keys():`);
             indent++;
             continue;
         }
 
+        //            WHILE
         if (whileExp.test(trim)) {
-            const m = trim.match(whileExp);
-            salida.push(`${"    ".repeat(indent)}while ${m[1]}:`);
+            let condicion = trim.match(whileExp)[1];
+            salida.push(`${"    ".repeat(indent)}while ${fixBooleanNull(condicion)}:`);
             indent++;
             continue;
         }
 
-        // ===== CIERRE } SOLO DE CICLOS =====
+        //       CIERRE DE BLOQUE }
         if (trim === "}" || trim === "};") {
 
-            // evita valores negativos
-            if (indent > 0) indent--;
+            if (indent > 0) indent--; // evitar negativos
 
             continue;
         }
 
-        // ===== break / continue =====
+        //     break / continue
         if (/^break;?$/.test(trim)) {
             salida.push(`${"    ".repeat(indent)}break`);
             continue;
@@ -70,11 +87,20 @@ export function transpilarCiclos(code) {
             continue;
         }
 
-        // ===== OTRAS LÍNEAS =====
+        //      OTRAS LÍNEAS DENTRO
         if (trim !== "") {
-            salida.push(`${"    ".repeat(indent)}${trim.replace(/;$/, "")}`);
+            const fixed = fixBooleanNull(trim.replace(/;$/, ""));
+            salida.push(`${"    ".repeat(indent)}${fixed}`);
         }
     }
 
     return salida.join("\n");
+}
+
+//     Conversión rápida de booleanos
+function fixBooleanNull(texto) {
+    return texto
+        .replace(/\btrue\b/g, "True")
+        .replace(/\bfalse\b/g, "False")
+        .replace(/\bnull\b/g, "None");
 }
