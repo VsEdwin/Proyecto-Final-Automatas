@@ -62,3 +62,43 @@ Arreglos
         { nombre: "Ana", edad: 30 }
     ];
 
+Ciclos
+    for (let i = 0; i < 5; i++) {
+        console.log(i);
+    }
+
+    for (let n = 1; n <= 5; n++) {
+    console.log("Num:", n);
+    }
+
+    let frutas = ["manzana", "pera", "uva"];
+    for (let f of frutas) {
+        console.log(f);
+    }
+
+    let persona = {
+        nombre: "Yeda",
+        edad: 21,
+        activo: true
+    };
+
+    for (let key in persona) {
+        console.log(key, persona[key]);
+    }
+
+    let i = 0;
+    while (i < 4) {
+        console.log("i =", i);
+        i++;
+    }
+
+    function contar() {
+        for (let i = 0; i < 3; i++) {
+            console.log("i =", i);
+
+            for (let j = 0; j < 2; j++) {
+                console.log("j =", j);
+            }
+        }
+    }
+

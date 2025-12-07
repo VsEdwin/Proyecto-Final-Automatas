@@ -4,45 +4,31 @@ export function transpilarCiclos(code) {
     const salida = [];
     let indent = 0;
 
-    // for clásico: soporta espacios opcionales
     const forClasico = /^for\s*\(\s*let\s+(\w+)\s*=\s*(.*?)\s*;\s*\1\s*([<>]=?|===|!==)\s*(.*?)\s*;\s*\1(\+\+|--)\s*\)\s*\{$/;
-
-    // for of
     const forOf = /^for\s*\(\s*let\s+(\w+)\s+of\s+(.*?)\s*\)\s*\{$/;
-
-    // for in
     const forIn = /^for\s*\(\s*let\s+(\w+)\s+in\s+(.*?)\s*\)\s*\{$/;
-
-    // while
     const whileExp = /^while\s*\((.*?)\)\s*\{$/;
 
     for (let line of lineas) {
 
         let trim = line.trim();
 
+        // ===== CICLOS =====
         if (forClasico.test(trim)) {
-
             const m = trim.match(forClasico);
-            const varName = m[1];
-            const start = m[2];
-            const op = m[3];
-            const end = m[4];
-            const inc = m[5]; // ++ o --
+            const start = m[2], op = m[3], end = m[4];
 
             let rangeCode = "";
-
-            // Determinar el range adecuado
             if (op === "<") rangeCode = `range(${start}, ${end})`;
             else if (op === "<=") rangeCode = `range(${start}, ${end}+1)`;
             else if (op === ">") rangeCode = `range(${start}, ${end}, -1)`;
             else if (op === ">=") rangeCode = `range(${start}, ${end}-1, -1)`;
 
-            salida.push(`${"    ".repeat(indent)}for ${varName} in ${rangeCode}:`);
+            salida.push(`${"    ".repeat(indent)}for ${m[1]} in ${rangeCode}:`);
             indent++;
             continue;
         }
 
-        // ======= FOR OF =======
         if (forOf.test(trim)) {
             const m = trim.match(forOf);
             salida.push(`${"    ".repeat(indent)}for ${m[1]} in ${m[2]}:`);
@@ -50,7 +36,6 @@ export function transpilarCiclos(code) {
             continue;
         }
 
-        // ======= FOR IN =======
         if (forIn.test(trim)) {
             const m = trim.match(forIn);
             salida.push(`${"    ".repeat(indent)}for ${m[1]} in ${m[2]}.keys():`);
@@ -58,7 +43,6 @@ export function transpilarCiclos(code) {
             continue;
         }
 
-        // ======= WHILE =======
         if (whileExp.test(trim)) {
             const m = trim.match(whileExp);
             salida.push(`${"    ".repeat(indent)}while ${m[1]}:`);
@@ -66,25 +50,27 @@ export function transpilarCiclos(code) {
             continue;
         }
 
-        // ======= CIERRE } =======
+        // ===== CIERRE } SOLO DE CICLOS =====
         if (trim === "}" || trim === "};") {
-            indent--;
+
+            // evita valores negativos
+            if (indent > 0) indent--;
+
             continue;
         }
 
-        // ======= break =======
+        // ===== break / continue =====
         if (/^break;?$/.test(trim)) {
             salida.push(`${"    ".repeat(indent)}break`);
             continue;
         }
 
-        // ======= continue =======
         if (/^continue;?$/.test(trim)) {
             salida.push(`${"    ".repeat(indent)}continue`);
             continue;
         }
 
-        // ======= líneas internas =======
+        // ===== OTRAS LÍNEAS =====
         if (trim !== "") {
             salida.push(`${"    ".repeat(indent)}${trim.replace(/;$/, "")}`);
         }
