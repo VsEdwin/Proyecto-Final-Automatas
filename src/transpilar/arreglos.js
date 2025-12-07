@@ -1,66 +1,77 @@
 // Transpilación de arreglos JS → listas Python
-
 export function transpilarArreglos(code) {
 
-    // separa el código en líneas
     const lineas = code.split("\n");
     const salida = [];
+    let dentroArreglo = false;
+    let nombreArreglo = "";
 
-    // regex para detectar declaración de arreglo
-    const arregloRegex = /^(let|var|const)\s+(\w+)\s*=\s*\[(.*)$/;
+    const inicioArreglo = /^(let|var|const)\s+(\w+)\s*=\s*\[(.*)$/;
 
-    // recorre cada línea
     for (let linea of lineas) {
 
-        const recortar = linea.trim();
+        const trim = linea.trim();
 
-        // ARREGLO que empieza en esta línea
-        if (arregloRegex.test(recortar)) {
+        //     INICIO DE ARREGLO
+        if (inicioArreglo.test(trim)) {
 
-            const nombre = recortar.match(arregloRegex)[2];
+            const match = trim.match(inicioArreglo);
+            nombreArreglo = match[2];
+            let contenido = match[3];
 
-            // si la línea termina con ]
-            if (recortar.endsWith("];") || recortar.endsWith("]")) {
+            //Caso: arreglo en una sola línea 
+            if (trim.endsWith("]") || trim.endsWith("];")) {
 
-                let contenido = recortar
-                    .replace(/^(let|var|const)\s+(\w+)\s*=\s*/, "")
-                    .replace(/;/g, "");
+                contenido = contenido
+                    .replace(/];?$/, "]")
+                    .trim();
 
-                contenido = convertirValoresArreglo(contenido);
+                contenido = convertirValores(contenido);
 
-                salida.push(`${nombre} = ${contenido}`);
-            } else {
-
-                // arreglo multi-línea
-                salida.push(`${nombre} = [`);
+                salida.push(`${nombreArreglo} = ${contenido}`);
             }
 
+            //Caso: arreglo en varias líneas
+            else {
+                salida.push(`${nombreArreglo} = [`);
+                dentroArreglo = true;
+            }
+
+            continue;
         }
 
-        // FINAL de arreglo multi-línea
-        else if (recortar === "];" || recortar === "]") {
+        //     FIN DE ARREGLO MULTILÍNEA
+        if (dentroArreglo && (trim === "]" || trim === "];")) {
             salida.push("]");
-        }
-    
-        // LÍNEA dentro de un arreglo multi-línea
-        else if (recortar.endsWith(",") || recortar.match(/^[^:]+\]?,?$/)) {
-
-            let contenido = convertirValoresArreglo(recortar.replace(/,$/, ""));
-            salida.push(`    ${contenido},`);
+            dentroArreglo = false;
+            nombreArreglo = "";
+            continue;
         }
 
-        // LÍNEA normal
-        else {
-            salida.push(linea);
+        //   CONTENIDO DEL ARREGLO
+        if (dentroArreglo) {
+
+            // Quitar coma final si existe
+            let lineaLimpia = trim.replace(/,$/, "");
+
+            // Convertir true/false/null
+            lineaLimpia = convertirValores(lineaLimpia);
+
+            // Agregar coma correcta (Python permite coma final)
+            salida.push(`    ${lineaLimpia},`);
+
+            continue;
         }
+
+        //     LÍNEA NORMAL
+        salida.push(linea);
     }
 
     return salida.join("\n");
 }
 
-// Función auxiliar para convertir valores del arreglo
-function convertirValoresArreglo(texto) {
-
+//      Conversión básica de valores
+function convertirValores(texto) {
     return texto
         .replace(/\btrue\b/g, "True")
         .replace(/\bfalse\b/g, "False")
