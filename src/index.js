@@ -3,58 +3,78 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import '../dist/public/css/main.css';
 import Swal from 'sweetalert2';
 
-//Importacion de los modulos
+// Importación de módulos
 import { transpilarVariables } from "./transpilar/variables.js";
 import { transpilarImpresiones } from "./transpilar/impresiones.js";
-import { transpilarObjetos } from "./transpilar/objetos.js"
+import { transpilarObjetos } from "./transpilar/objetos.js";
 import { transpilarArreglos } from "./transpilar/arreglos.js";
 import { transpilarFunciones } from "./transpilar/funciones.js";
-import {transpilarCiclos} from "./transpilar/ciclos.js";
+import { transpilarCiclos } from "./transpilar/ciclos.js";
 import { transpilarEstructuras } from "./transpilar/estructuras.js";
+
+//Fucniones global para transpilar todo el codigo
+function transpilarTodo(code) {
+    let salida = code;
+
+    salida = transpilarImpresiones(salida);
+    salida = transpilarVariables(salida);
+    salida = transpilarFunciones(salida);
+    salida = transpilarCiclos(salida);
+    salida = transpilarObjetos(salida);
+    salida = transpilarArreglos(salida);
+    salida = transpilarEstructuras(salida);
+
+    return salida;
+}
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    //Sacar info de los Id y botones
+    // Elementos de la interfaz
     const entrada = document.getElementById("entrada");
     const salida = document.getElementById("salida");
     const btntranspilar = document.getElementById("btntranspilar");
     const btnlimpiar = document.getElementById("btnlimpiar");
 
+    //boton de transpilar
     btntranspilar.addEventListener("click", () => {
 
-        // Obtiene el código ingresado
-        let codigo = entrada.value;
+        let codigo = entrada.value.trim();
 
-        // Valida si está vacío y manda alerta
-        if (codigo.trim() === "") {
-            Swal.fire("Atención", "El área de entrada está vacía.", "warning");
+        //Validación de código vacío
+        if (codigo === "") {
+            Swal.fire({
+                icon: "warning",
+                title: "Código vacío",
+                text: "Por favor escribe algo antes de transpilar."
+            });
             return;
         }
 
+        //Validación básica de sintaxis JavaScript
+        const esJS = /let |var |const |function|\{|\}|\(|\)|=>|console\.log/.test(codigo);
 
-        //Ejecuta el transpilador de impresiones
-        codigo = transpilarImpresiones(codigo);
-        
-        // Ejecuta el transpilador de variables
-        codigo = transpilarVariables(codigo);
+        if (!esJS) {
+            Swal.fire({
+                icon: "error",
+                title: "Código no válido",
+                text: "Lo que ingresaste no parece ser código JavaScript.",
+                footer: "Solo se aceptan estructuras y sintaxis de JavaScript."
+            });
+            return;
+        }
 
-        //Ejecuta el trnaspilador de funciones
-        codigo = transpilarFunciones(codigo);
+        //Intento de transpilación
+        try {
+            const codigoTranspilado = transpilarTodo(codigo);
+            salida.value = codigoTranspilado;
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Error al transpilar",
+                text: error.message
+            });
+        }
 
-        //Eejecuta el transpioldaro de ciclos
-        codigo = transpilarCiclos(codigo);
-        
-        //Ejecuta el transpilador de objetos
-        codigo = transpilarObjetos(codigo);
-
-        //Ejecuta el transpilador de arreglos
-        codigo = transpilarArreglos(codigo);
-
-        //eejecuta el transpilador de estructuras
-        codigo = transpilarEstructuras(codigo);
-
-        // Muestra el resultado final
-        salida.value = codigo;
     });
 
     btnlimpiar.addEventListener("click", () => {
