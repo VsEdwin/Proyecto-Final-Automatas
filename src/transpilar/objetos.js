@@ -14,29 +14,25 @@ export function transpilarObjetos(code) {
 
         const recortar = linea.trim();
 
-        // 🔴 IGNORAR FUNCIONES, CLASES, IF, FOR, WHILE, SWITCH
+        //IGNORAR ESTRUCTURAS QUE NO SON OBJETOS
         if (/^(function|class|if|for|while|switch)\b/.test(recortar)) {
             salida.push(linea);
             continue;
         }
 
-        // 🔴 IGNORAR FUNCIONES DE OBJETO (métodos)
-        //      ejemplo:
-        //      saludar: function() {
+        //IGNORAR MÉTODOS DE OBJETO
         if (/^\w+\s*:\s*function\s*\(/.test(recortar)) {
-            salida.push(linea); 
+            salida.push(linea);
             continue;
         }
 
-        // 🔴 IGNORAR ARROW FUNCTIONS DENTRO DE OBJETOS
-        //      ejemplo:
-        //      hablar: () => {}
+        //IGNORAR ARROW FUNCTIONS
         if (/^\w+\s*:\s*\(?.*\)?\s*=>\s*{?/.test(recortar)) {
             salida.push(linea);
             continue;
         }
 
-        // 🟢 1. INICIO DE OBJETO
+        //1. INICIO DE OBJETO PRINCIPAL
         if (inicioObjeto.test(recortar)) {
             const nombreVar = recortar.match(inicioObjeto)[2];
             salida.push(`${nombreVar} = {`);
@@ -44,7 +40,7 @@ export function transpilarObjetos(code) {
             continue;
         }
 
-        // 🟢 2. OBJETO ANIDADO
+        //2. OBJETO ANIDADO
         if (recortar.endsWith("{") && propiedad.test(recortar.replace("{", "").trim())) {
 
             const match = propiedad.exec(recortar.replace("{", "").trim());
@@ -55,18 +51,20 @@ export function transpilarObjetos(code) {
             continue;
         }
 
-        // 🟢 3. CIERRE DE OBJETO }
+        //3. CIERRE DE OBJETO }
         if (recortar === "}" || recortar === "},") {
-            nivel = Math.max(0, nivel - 1); // nunca negativo
+
+            nivel = Math.max(0, nivel - 1);
+
             const coma = recortar.endsWith(",") ? "," : "";
             salida.push(`${"    ".repeat(nivel)}}${coma}`);
             continue;
         }
 
-        // 🟢 4. PROPIEDADES NORMALES
+        //4. PROPIEDADES NORMALES
         if (propiedad.test(recortar)) {
 
-            let [_, key, valor, coma] = propiedad.exec(recortar);
+            let [_, key, valor] = propiedad.exec(recortar);
 
             valor = valor
                 .replace(/,$/, "")
@@ -74,12 +72,11 @@ export function transpilarObjetos(code) {
                 .replace(/\bfalse\b/g, "False")
                 .replace(/\bnull\b/g, "None");
 
-            salida.push(`${"    ".repeat(nivel)}"${key}": ${valor}${coma || ","}`);
+            salida.push(`${"    ".repeat(nivel)}"${key}": ${valor}`);
             continue;
         }
 
-        // 🟢 5. TODO LO DEMÁS SE MANTIENE IGUAL
-       
+        //5. LÍNEAS NORMALES
         salida.push(linea);
     }
 
