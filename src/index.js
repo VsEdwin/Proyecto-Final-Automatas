@@ -10,6 +10,7 @@ import { transpilarObjetos } from "./transpilar/objetos.js"
 import { transpilarArreglos } from "./transpilar/arreglos.js";
 import { transpilarFunciones } from "./transpilar/funciones.js";
 import {transpilarCiclos} from "./transpilar/ciclos.js";
+import { transpilarEstructuras } from "./transpilar/estructuras.js";
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -49,6 +50,8 @@ document.addEventListener("DOMContentLoaded", () => {
         //Ejecuta el transpilador de arreglos
         codigo = transpilarArreglos(codigo);
 
+        //eejecuta el transpilador de estructuras
+        codigo = transpilarEstructuras(codigo);
 
         // Muestra el resultado final
         salida.value = codigo;
