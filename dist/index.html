@@ -1,68 +1,154 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Transpilador De Codigo</title>
-</head>
+  </head>
 
-<body>
+  <body>
+
     <nav class="navbar navbar-dark header-gradient shadow-sm mb-4">
-        <div class="container-fluid">
-            <span class="navbar-brand fw-bold">Transpilador de Codigo</span>
-        </div>
+      <div class="container-fluid">
+        <span class="navbar-brand fw-bold">Transpilador de Codigo</span>
+      </div>
     </nav>
 
     <div class="container mb-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class="card shadow border-0 rounded-4">
-                    <div class="card-header bg-white p-4 rounded-top-4">
-                        <h5 class="text-primary fw-bold mb-3">
-                            Caracteristicas Soportadas
-                        </h5>
-                        <div class="d-flex flex-wrap gap-2">
-                            <span class="badge bg-info text-dark">Variables</span>
-                            <span class="badge bg-info text-dark">Objetos</span>
-                            <span class="badge bg-info text-dark">Arreglos</span>
-                            <span class="badge bg-info text-dark">Funciones</span>
-                            <span class="badge bg-warning text-dark">Estructuras de Control</span>
-                            <span class="badge bg-warning text-dark">Ciclos de Repeticion</span>
-                            <span class="badge bg-secondary text-light">Impresiones</span>
-                        </div>
-                    </div>
+      <div class="row justify-content-center">
+        <div class="col-lg-10">
+          <div class="card shadow border-0 rounded-4">
 
-                    <div class="card-body p-4">
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <label for="entrada" class="form-label fw-bold text-warning">Codigo De JavaScript</label>
-                                <textarea id="entrada" class="form-control bg-light code-area font-monospace"
-                                    rows="13" placeholder="Escribe tu codigo aqui."></textarea>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="salida" class="form-label fw-bold text-success">Codigo De Python</label>
-                                <textarea id="salida" class="form-control border-success code-area font-monospace"
-                                    rows="13" readonly placeholder="El resultado aparecera aqui."></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        class="card-footer bg-white p-3 d-flex justify-content-between align-items-center rounded-bottom-4">
-                        <div>
-                            <button id="btnlimpiar" class="btn btn-outline-secondary me-2">
-                                Limpiar
-                            </button>
-                            <button id="btntranspilar" class="btn btn-primary fw-bold">
-                                Transpilar Codigo →
-                            </button>
-                        </div>
-                    </div>
-                </div>
+            <div class="card-header bg-white p-4 rounded-top-4">
+              <h5 class="text-primary fw-bold mb-3">Caracteristicas Soportadas</h5>
+              <div class="d-flex flex-wrap gap-2">
+                <span class="badge bg-info text-dark">Variables</span>
+                <span class="badge bg-info text-dark">Objetos</span>
+                <span class="badge bg-info text-dark">Arreglos</span>
+                <span class="badge bg-info text-dark">Funciones</span>
+                <span class="badge bg-warning text-dark">Estructuras de Control</span>
+                <span class="badge bg-warning text-dark">Ciclos de Repeticion</span>
+                <span class="badge bg-secondary text-light">Impresiones</span>
+              </div>
             </div>
+
+            <div class="card-body p-4">
+              <div class="row g-4">
+
+                <div class="col-md-6">
+                  <label for="entrada" class="form-label fw-bold text-warning">Codigo De JavaScript</label>
+                  <textarea id="entrada" class="form-control bg-light code-area font-monospace" rows="13"
+                    placeholder="Escribe tu codigo aqui."></textarea>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="salida" class="form-label fw-bold text-success">Codigo De Python</label>
+                  <textarea id="salida" class="form-control border-success code-area font-monospace"rows="13"
+                    readonly placeholder="El resultado aparecera aqui."></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal fade" id="modalEjemplos" tabindex="-1">
+              <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content rounded-4 shadow">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-primary fw-bold">Ejemplos de Todas las Características</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+
+                  <div class="modal-body">
+                    <h6 class="fw-bold text-info">Variables</h6>
+                    <pre class="bg-light p-3 rounded">
+                        let x = 21;
+                        let activo = true;
+                        let nombre = "Edwin";
+                    </pre>
+
+                    <h6 class="fw-bold text-info">Objetos</h6>
+                    <pre class="bg-light p-3 rounded">
+                        let persona = {
+                            nombre: "Yeda",
+                            edad: 21,
+                            activo: false
+                        };
+                    </pre>
+
+                    <h6 class="fw-bold text-info">Arreglos</h6>
+                    <pre class="bg-light p-3 rounded">
+                        let numeros = [10, 20, 30];
+                        let datos = [
+                            10,
+                            true,
+                            null
+                        ];
+                    </pre>
+
+                    <h6 class="fw-bold text-info">Funciones</h6>
+                    <pre class="bg-light p-3 rounded">
+                        function sumar(a, b) {
+                            console.log(a + b);
+                        }
+                    </pre>
+
+                    <h6 class="fw-bold text-warning">Estructuras de Control</h6>
+                    <pre class="bg-light p-3 rounded">
+                        if (x > 10) {
+                            console.log("Mayor");
+                        } else {
+                            console.log("Menor o igual");
+                        }
+
+                        switch (nombre) {
+                            case "Edwin":
+                                console.log("Hola Edwin");
+                                break;
+                            default:
+                                console.log("Desconocido");
+                        }
+                    </pre>
+
+                    <h6 class="fw-bold text-warning">Ciclos</h6>
+                    <pre class="bg-light p-3 rounded">
+                        for (let i = 0; i < 5; i++) {
+                            console.log(i);
+                        }
+
+                        let n = 3;
+                        while (n > 0) {
+                            n--;
+                        }
+                    </pre>
+
+                    <h6 class="fw-bold text-secondary">Impresiones</h6>
+                    <pre class="bg-light p-3 rounded">
+                        console.log("Hola mundo");
+                    </pre>
+                </div>
+
+                  <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="card-footer bg-white p-3 d-flex justify-content-between align-items-center rounded-bottom-4">
+              <div>
+                <button id="btnlimpiar" class="btn btn-outline-secondary me-2">Limpiar</button>
+
+                <button id="btnEjemplos" class="btn btn-info fw-bold" data-bs-toggle="modal" data-bs-target="#modalEjemplos">
+                  Ver Ejemplos
+                </button>
+
+                <button id="btntranspilar" class="btn btn-primary fw-bold"> Transpilar Codigo →</button>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
     <script src="./bundle.js"></script>
-</body>
+  </body>
 </html>
