@@ -13,11 +13,11 @@ export function transpilarImpresiones(code) {
         if (/^console\.log\s*\(/.test(recortar)) {
 
             let convertir = recortar
-                .replace(/^console\.log\s*\(/, "print(") // convertir console.log → print
-                .replace(/;/g, "")                       // quitar ;
-                .replace(/\btrue\b/g, "True")            // true → True
-                .replace(/\bfalse\b/g, "False")          // false → False
-                .replace(/\bnull\b/g, "None");           // null → None
+                .replace(/^console\.log\s*\(/, "print(") // console.log → print
+                .replace(/;$/, "")                       // eliminar solo el ; final
+                .replace(/\btrue\b/gi, "True")           // true → True
+                .replace(/\bfalse\b/gi, "False")         // false → False
+                .replace(/\bnull\b/gi, "None");          // null → None
 
             salida.push(convertir);
 
