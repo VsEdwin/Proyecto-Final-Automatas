@@ -5,10 +5,10 @@
 } */
 body {
     background-image: url("../img/Sanemi\ .png");
-    background-size: cover;
+    background-size: cover;      /* Ajusta la imagen al tamaño de pantalla */
     background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center;
+    background-attachment: fixed; /* Efecto fijo al hacer scroll */
+    background-position: center;  /* Centra la imagen */
   }
 
 .header-gradient {
@@ -23,10 +23,9 @@ body {
 }
 
 .card {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(6px);
+    background: #ffffff;
     border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid #e5e7eb;
 }
 
 .card-header {
