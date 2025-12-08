@@ -81,4 +81,39 @@ document.addEventListener("DOMContentLoaded", () => {
         entrada.value = "";
         salida.value = "";
     });
+
+    const btncopiar = document.getElementById("btncopiar");
+
+    btncopiar.addEventListener("click", async () => {
+
+        const texto = document.getElementById("salida").value.trim();
+
+        if (texto === "") {
+            Swal.fire({
+                icon: "warning",
+                title: "Nada para copiar",
+                text: "Primero transpila el código antes de copiar."
+            });
+            return;
+        }
+
+        try {
+            await navigator.clipboard.writeText(texto);
+
+            Swal.fire({
+                icon: "success",
+                title: "Código copiado",
+                text: "El código Python fue copiado correctamente.",
+                timer: 1500,
+                showConfirmButton: false
+            });
+
+        } catch (err) {
+            Swal.fire({
+                icon: "error",
+                title: "Error al copiar",
+                text: "El navegador no permitió copiar el texto."
+            });
+        }
+    });
 });
